@@ -1,4 +1,5 @@
-# domain/phase_detection.py
+from __future__ import annotations
+
 from domain.models import FeatureSet, PhaseResult
 
 

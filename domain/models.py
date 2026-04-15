@@ -1,4 +1,3 @@
-# domain/models.py
 from __future__ import annotations
 
 from dataclasses import dataclass, field
@@ -57,7 +56,7 @@ class RiskAssessment:
 @dataclass
 class SafetyStatus:
     asset_id: str
-    status: str  # OK, WARNING, CRITICAL, LOCKOUT
+    status: str
     breached_rules: List[str]
     summary: str
 

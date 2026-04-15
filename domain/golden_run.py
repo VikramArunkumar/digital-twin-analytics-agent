@@ -1,4 +1,5 @@
-# domain/golden_run.py
+from __future__ import annotations
+
 from domain.models import BaselineComparison, FeatureSet, PhaseResult
 
 

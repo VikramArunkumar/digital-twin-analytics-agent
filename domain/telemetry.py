@@ -1,4 +1,3 @@
-# domain/telemetry.py
 from __future__ import annotations
 
 from statistics import mean
@@ -15,9 +14,9 @@ class TelemetryMiningService:
         load = [p.values.get("load", 0.0) for p in batch.points]
 
         features = {
-            "vibration_mean": mean(vibration),
-            "temperature_mean": mean(temperature),
-            "load_mean": mean(load),
+            "vibration_mean": round(mean(vibration), 3),
+            "temperature_mean": round(mean(temperature), 3),
+            "load_mean": round(mean(load), 3),
             "vibration_max": max(vibration),
             "temperature_max": max(temperature),
         }

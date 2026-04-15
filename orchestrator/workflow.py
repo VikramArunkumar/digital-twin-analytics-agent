@@ -1,4 +1,3 @@
-# orchestrator/workflow.py
 from __future__ import annotations
 
 from domain.models import TelemetryBatch, WorkflowState
@@ -13,12 +12,6 @@ class DigitalTwinWorkflow:
 
     def run(self, telemetry_batch: TelemetryBatch) -> WorkflowState:
         state = WorkflowState(telemetry=telemetry_batch)
-
-        # 1. Structured processing
         state = self.pipeline_crew.run(state)
-
-        # 2. Conversational action planning
         state.action_plan = self.reasoning_engine.generate_action_plan(state)
-
-        # 3. Optional: persist to audit store here
         return state

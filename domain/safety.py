@@ -1,4 +1,5 @@
-# domain/safety.py
+from __future__ import annotations
+
 from domain.models import FeatureSet, RiskAssessment, SafetyStatus
 
 

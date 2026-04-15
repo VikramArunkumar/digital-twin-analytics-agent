@@ -1,12 +1,9 @@
-# autogen_layer/group_chat.py
 from __future__ import annotations
 
 import json
+
 from domain.models import ActionPlan, RecommendedAction, WorkflowState
-
-# Sketch imports; adjust to installed AutoGen version
-from autogen import AssistantAgent, UserProxyAgent, GroupChat, GroupChatManager
-
+from framework_stubs import AssistantAgent, UserProxyAgent, GroupChat, GroupChatManager
 from autogen_layer.prompts import SYSTEM_PROMPTS
 
 
@@ -91,15 +88,8 @@ class ActionReasoningEngine:
             max_round=8,
         )
 
-        manager = GroupChatManager(groupchat=chat, llm_config=self.advisor.llm_config)
-
-        result = self.controller.initiate_chat(
-            manager,
-            message=prompt,
-        )
-
-        # Production code should parse structured output from the advisor.
-        # This sketch uses the final chat summary as the reasoning field.
+        manager = GroupChatManager(groupchat=chat, llm_config=getattr(self.advisor, "llm_config", {}))
+        result = self.controller.initiate_chat(manager, message=prompt)
         reasoning_text = getattr(result, "summary", None) or str(result)
 
         actions = self._heuristic_actions(state)

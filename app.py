@@ -1,7 +1,6 @@
-# app.py
 from __future__ import annotations
 
-from domain.models import TelemetryBatch, TelemetryPoint
+from domain.models import TelemetryBatch, TelemetryPoint, WorkflowState
 from orchestrator.workflow import DigitalTwinWorkflow
 from domain.audit import AuditService
 
@@ -27,14 +26,19 @@ def build_demo_batch() -> TelemetryBatch:
     return TelemetryBatch(asset_id="press_07", points=points)
 
 
+def require_human_review(state: WorkflowState) -> bool:
+    if state.action_plan is None:
+        return True
+    if any(action.requires_human_approval for action in state.action_plan.actions):
+        return True
+    if state.safety and state.safety.status in {"WARNING", "CRITICAL"}:
+        return True
+    return False
+
+
 def main() -> None:
     llm_config = {
-        "config_list": [
-            {
-                "model": "gpt-4.1",
-                "api_key": "YOUR_API_KEY",
-            }
-        ],
+        "config_list": [{"model": "stub-gpt", "api_key": "optional-for-stubs"}],
         "temperature": 0.2,
     }
 
@@ -58,6 +62,9 @@ def main() -> None:
 
     print("\n=== Action Plan ===")
     print(state.action_plan)
+
+    print("\n=== Human Review ===")
+    print("Required" if require_human_review(state) else "Not required")
 
     path = audit.save(state)
     print(f"\nSaved audit log to: {path}")
